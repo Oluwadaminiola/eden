@@ -109,10 +109,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import tab from "@/components/tab.vue";
-import tabs from "@/components/tabs.vue";
-
 export default {
   name: "Home",
   data() {
@@ -126,10 +122,7 @@ export default {
       pages: [],
     };
   },
-  components: {
-    tab,
-    tabs,
-  },
+
   methods: {
     setPages() {
       let numberOfPages = Math.ceil(this.postsCount / this.perPage);

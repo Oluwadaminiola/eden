@@ -9,7 +9,7 @@ let router = new Router({
   hash: false,
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       component: Home
     },
@@ -21,6 +21,11 @@ let router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     },
+    {
+      path: '/',
+      name: 'post',
+      component: () => import('../views/post.vue')
+    }
     
   ]
 })

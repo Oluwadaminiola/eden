@@ -15,7 +15,9 @@
           <div></div>
           <div></div>
           <div></div>
+          
         </div>
+        <p class="text-center fs-14 ff-a">Posts Loading...</p>
       </div>
     </div>
   </div>
@@ -31,26 +33,26 @@ export default {};
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.2) !important;
+  background: rgba(252, 170, 103, 0.05) !important;
 }
 .inner {
   height: 100%;
   margin: 0 auto;
   position: fixed;
-  top: calc(50% - 50px);
+  top: calc(50% - 80px);
   left: calc(50% - 50px);
 }
 .lds-default {
   display: inline-block;
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 .lds-default div {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: #000;
+  background: rgba(47, 70, 98, 0.84);
   border-radius: 50%;
   animation: lds-default 1.2s linear infinite;
 }

@@ -1,80 +1,99 @@
 <template>
   <div>
-    <!-- <div class="row">
-      <div class="col-3">
+    <div class="row">
+      <div class="col-lg-3 col-sm-4">
+        <!-- <select v-model="tabName" v-on:change="selectTab(event)" class="form-control">
+          <option :value="tab" v-for="(tab, index) in tabs" :key="index">
+            <a
+              class="nav-link"
+              :href="tab.href"
+              :class="{ 'active': tab.isActive }"
+              role="tab"
+              aria-controls="v-pills-home"
+              aria-selected="true"
+            >{{ tab.name }}</a>
+          </option>
+        </select> -->
         <div
-          class="nav flex-column nav-pills"
+          class="nav flex-column nav-pills tab"
           id="v-pills-tab"
           role="tablist"
           aria-orientation="vertical"
+          v-for="(tab, index) in tabs"
+          :key="index"
         >
           <a
-            v-for="tab in tabs"
-            v-bind:key="tab"
-            :class="{ 'active': tab.isActive }"
-            :href="tab.href"
-            @click="selectTab(tab)"
             class="nav-link"
-            id="v-pills-home-tab"
+            :href="tab.href"
+            :class="{ 'active': tab.isActive }"
+            @click="selectTab(tab)"
             role="tab"
             aria-controls="v-pills-home"
             aria-selected="true"
-          >{{ tab.name }}</a>  
+          >{{ tab.name }}</a>
         </div>
       </div>
-      <div class="col-9">
-        <div class="tabs-details">
-          <slot></slot>
+      <div class="col-lg-9 col-sm-8">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tabs-details">
+            <slot></slot>
+          </div>
         </div>
       </div>
-    </div>-->
-    <div class="tabs">
-      <ul class="nav nav-tabs ad_tabs">
-        <li class="nav-item pr-3" v-for="(tab, index) in tabs" :key="index">
+    </div>
+    <!-- <div class="tabs">
+      <div class="nav nav-tabs">
+        <li class="nav-item" v-for="(tab, index) in tabs" :key="index">
           <a
-            class="nav-link pb-3"
-            :class="{ 'active': tab.isActive }"
             :href="tab.href"
-            @click="selectTab(tab.post)"
+            :class="{ 'active': tab.isActive }"
+            class="nav-link pb-3"
+            @click="selectTab(tab)"
           >{{ tab.name }}</a>
         </li>
-      </ul>
+      </div>
     </div>
     <div class="tabs-details">
       <slot></slot>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
 export default {
-  name: "tabs",
-
-  data() {
-    return { tabs: [] };
+  props: {
+    posts: {},
   },
-
+  data() {
+    return {
+      tabs: [],
+      selected: [],
+    };
+  },
   mounted() {
     this.tabs = this.$children;
-
-    // add this :
+    this.getName();
     this.$nextTick(() => {
       this.selectTab(this.tabs[0]);
     });
     this.selectTab(this.tabs[1]);
   },
-
-  created() {},
-
   methods: {
     selectTab(selectedTab) {
-      console.log(selectedTab)
-      // let pp = this.tabs.forEach((tab) => {
-      //   tab.isActive = tab.href == selectedTab.subreddit;
-      // });
-      // console.log(pp)
-      // console.log('sdafv ',selectedTab)
-      // console.log('sda fv ',this.tabs)
+      this.tabs.forEach((tab) => {
+        tab.isActive = tab.href == selectedTab.href;
+      });
     },
+    getName() {
+      this.selected = this.tabs
+        .filter((item) => item.isActive == true)
+        .map((ele) => ele.name);
+      console.log("sada ", this.selected);
+    },
+  },
+  computed: {
+    // selected(){
+    //   this.tabs.filter(item => item.isActive == true).map(ele => ele.name)
+    // }
   },
 };
 </script>
