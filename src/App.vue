@@ -1,32 +1,48 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div>
+    <!-- <Loader /> -->
+    <div v-if="isLoading">
+      <Loader />
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
+<script>
+import { mapState } from "vuex";
+import axios from 'axios'
+import Loader from "@/components/loader";
+export default {
+  components: {
+    Loader,
+  },
+  computed: {
+    ...mapState(["isLoading"]),
+  },
+  created() {
+    axios.interceptors.request.use(
+      (config) => {
+        this.$store.commit("loading", true);
+        return config;
+      },
+      (error) => {
+        this.$store.commit("loading", false);
+        return Promise.reject(error);
+      }
+    );
+
+    axios.interceptors.response.use(
+      (response) => {
+        this.$store.commit("loading", false);
+        return response;
+      },
+      (error) => {
+        this.$store.commit("loading", false);
+        return Promise.reject(error);
+      }
+    );
+  },
+};
+</script>
