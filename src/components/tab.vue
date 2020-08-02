@@ -58,11 +58,11 @@
             <a
               :href="post.data.url"
               target="_blank"
-              v-if="post.data.thumbnail == 'default' || post.data.thumbnail == 'self' || post.data.thumbnail == 'image' || post.data.thumbnail == 'nsfw' "
+              v-if="post.data.thumbnail == 'default' || post.data.thumbnail == 'self' || post.data.thumbnail == 'image' || post.data.thumbnail == 'nsfw' || post.data.thumbnail == 'spoiler' "
             >
               <img
                 src="https://www.webnode.com/blog/wp-content/uploads/2019/04/blog2.png"
-                alt="images"
+                alt="images"  
               />
             </a>
             <a :href="post.data.url" target="_blank" v-else>
@@ -215,12 +215,12 @@ export default {
     });
   },
   methods: {
-    checkVotes(){},
+    checkVotes() {},
     timeFormat(value) {
       var d = new Date(0);
       let dated = d.setUTCSeconds(String(value));
       return moment.utc(dated).format("HH");
-    }
+    },
   },
   filters: {
     dateFormat(value) {
@@ -228,7 +228,6 @@ export default {
       let dated = d.setUTCSeconds(String(value));
       return moment.utc(dated).format("lll");
     },
-    
   },
 };
 </script>

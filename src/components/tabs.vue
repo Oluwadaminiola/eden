@@ -2,35 +2,40 @@
   <div>
     <div class="row">
       <div class="col-lg-3 col-sm-4">
-        <!-- <select v-model="tabName" v-on:change="selectTab(event)" class="form-control">
-          <option :value="tab" v-for="(tab, index) in tabs" :key="index">
+        <div class="py-3 d-sm-none">
+          <label for class="fs-16 fc-gy ff-a">Choose Subreddit:</label>
+          <select v-model="tabName" v-on:change="selectTab(tabName)" class="form-control">
+            <option :value="tab" v-for="(tab, index) in tabs" :key="index">
+              <a
+                class="nav-link"
+                :href="tab.href"
+                :class="{ 'active': tab.isActive }"
+                role="tab"
+                aria-controls="v-pills-home"
+                aria-selected="true"
+              >{{ tab.name }}</a>
+            </option>
+          </select>
+        </div>
+        <div class="d-none d-sm-block">
+          <div
+            class="nav flex-column nav-pills tab"
+            id="v-pills-tab"
+            role="tablist"
+            aria-orientation="vertical"
+            v-for="(tab, index) in tabs"
+            :key="index"
+          >
             <a
               class="nav-link"
               :href="tab.href"
               :class="{ 'active': tab.isActive }"
+              @click="selectTab(tab)"
               role="tab"
               aria-controls="v-pills-home"
               aria-selected="true"
             >{{ tab.name }}</a>
-          </option>
-        </select> -->
-        <div
-          class="nav flex-column nav-pills tab"
-          id="v-pills-tab"
-          role="tablist"
-          aria-orientation="vertical"
-          v-for="(tab, index) in tabs"
-          :key="index"
-        >
-          <a
-            class="nav-link"
-            :href="tab.href"
-            :class="{ 'active': tab.isActive }"
-            @click="selectTab(tab)"
-            role="tab"
-            aria-controls="v-pills-home"
-            aria-selected="true"
-          >{{ tab.name }}</a>
+          </div>
         </div>
       </div>
       <div class="col-lg-9 col-sm-8">
@@ -67,6 +72,7 @@ export default {
     return {
       tabs: [],
       selected: [],
+      tabName: ''
     };
   },
   mounted() {
