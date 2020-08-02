@@ -58,11 +58,11 @@
             <a
               :href="post.data.url"
               target="_blank"
-              v-if="post.data.thumbnail == 'default' || post.data.thumbnail == 'self' || post.data.thumbnail == 'image' || post.data.thumbnail == 'nsfw' || post.data.thumbnail == 'spoiler' "
+              v-if="post.data.thumbnail.match(/^[a-zA-Z]+$/)"
             >
               <img
                 src="https://www.webnode.com/blog/wp-content/uploads/2019/04/blog2.png"
-                alt="images"  
+                alt="images"
               />
             </a>
             <a :href="post.data.url" target="_blank" v-else>
@@ -215,7 +215,47 @@ export default {
     });
   },
   methods: {
-    checkVotes() {},
+    checkVotes() {
+      var postVote = this.filterVotes;
+
+      if (postVote === "1to10") {
+        return this.posts.filter((item) => {
+          return item.data.ups >= 1000 && item.data.ups <= 10000;
+        });
+      } else if (postVote === "10to50") {
+        return this.posts.filter((item) => {
+          return item.data.ups > 10000 && item.data.ups <= 50000;
+        });
+      } else if (postVote === "50to100") {
+        return this.posts.filter((item) => {
+          return item.data.ups > 50000 && item.data.ups <= 100000;
+        });
+      } else if (postVote === "gt100") {
+        return this.posts.filter((item) => {
+          return item.data.ups > 100000;
+        });
+      }
+    },
+    checkTime() {
+      var postTime = this.filterDate;
+
+      if (postTime === "Morning") {
+        return this.posts.filter((item) => {
+          let time = this.timeFormat(item.data.created);
+          return time >= 1 && time < 12;
+        });
+      } else if (postTime === "Afternoon") {
+        return this.posts.filter((item) => {
+          let time = this.timeFormat(item.data.created);
+          return time >= 12 && time < 16;
+        });
+      } else if (postTime === "Evening") {
+        return this.posts.filter((item) => {
+          let time = this.timeFormat(item.data.created);
+          return time >= 16 && time < 23;
+        });
+      }
+    },
     timeFormat(value) {
       var d = new Date(0);
       let dated = d.setUTCSeconds(String(value));

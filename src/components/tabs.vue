@@ -90,9 +90,7 @@ export default {
     }
   },
   computed: {
-    // selected(){
-    //   this.tabs.filter(item => item.isActive == true).map(ele => ele.name)
-    // }
+    
   },
 };
 </script>
