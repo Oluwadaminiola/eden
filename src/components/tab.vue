@@ -6,8 +6,34 @@
         <p class="fs-20 ff-a fw-6 mb-1 fc-gy">{{selectedName.toString()}}</p>
         <hr />
       </div>
-      <div class="col-lg-6"></div>
+      <div class="col-lg-3">
+        <label for class="fs-14 fc-gy ff-a">Filter by time</label>
+        <select v-model="filterDate" class="form-control">
+          <option value="Morning">Morning Posts</option>
+          <option value="Afternoon">Afternoon Posts</option>
+          <option value="Evening">Evening Posts</option>
+        </select>
+      </div>
+      <div class="col-lg-3">
+        <label for class="fs-14 fc-gy ff-a">Filter by Upvotes</label>
+        <select v-model="filterVotes" class="form-control">
+          <option value="1to10">1000 - 10000 Upvotes</option>
+          <option value="10to50">10000 - 50000 Upvotes</option>
+          <option value="50to100">50000 - 100000 Upvotes</option>
+          <option value="gt100">> 100000 Upvotes</option>
+        </select>
+      </div>
       <div class="col-lg-3 col-sm-6 mb-3">
+        <label for class="fs-14 fc-gy ff-a">Sort by:</label>
+
+        <select class="form-control" v-model="sortPosts">
+          <option value="A2Z">Highest to Lowest Upvotes</option>
+          <option value="Z2A">Lowest to Highest Upvotes</option>
+        </select>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-3">
+        <label for class="fs-14 fc-gy ff-a">Search for posts</label>
+
         <div class="input-group lightform mb-3">
           <div class="input-group-append pl-2">
             <img src="../../public/img/search.svg" alt />
@@ -15,13 +41,18 @@
           <input type="text" placeholder="Search posts" v-model="search" class="form-control" />
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6 mb-3">
-        <select class="form-control" v-model="sortPosts">
-          <option value="A2Z">Ascending</option>
-          <option value="Z2A">Descending</option>
-        </select>
+      <div class="col-lg-12" v-if="filteredPosts.length == 0">
+        <div class="emptystate d-flex justify-content-center align-items-center flex-column">
+          <img src="../../public/img/box.svg" class="img-fluid" alt />
+          <p class="text-center fs-24 ff-a fc-gy">There are currently no posts in this category!</p>
+        </div>
       </div>
-      <div class="col-lg-4 col-sm-6 mb-3" v-for="(post, index) in filteredPosts" :key="index">
+      <div
+        class="col-lg-4 col-sm-6 mb-3"
+        v-else
+        v-for="(post, index) in filteredPosts"
+        :key="index"
+      >
         <div class="post">
           <div class="header_post">
             <a
@@ -41,7 +72,7 @@
 
           <div class="body_post">
             <div class="post_content">
-              <h1>{{post.data.title.substring(0, 100)}}</h1>
+              <h1>{{post.data.title.substring(0, 110)}}</h1>
               <p></p>
 
               <div class="bottom">
@@ -91,6 +122,8 @@ export default {
       isActive: false,
       search: "",
       sortPosts: "A2Z",
+      filterVotes: "",
+      filterDate: "",
       // posts: []
     };
   },
@@ -103,7 +136,6 @@ export default {
       let pp = p.sort((a, b) => {
         return parseFloat(b.data.ups) - parseFloat(a.data.ups);
       });
-      console.log("dsd ", pp);
       return pp;
     },
     selectedName() {
@@ -116,7 +148,8 @@ export default {
     },
     filteredPosts() {
       var category = this.sortPosts;
-
+      var postVote = this.filterVotes;
+      var postTime = this.filterDate;
       if (category === "A2Z") {
         if (this.search) {
           return this.posts.filter((item) => {
@@ -124,8 +157,42 @@ export default {
               .toLowerCase()
               .includes(this.search.toLowerCase());
           });
+        } else if (postVote === "1to10") {
+          return this.posts.filter((item) => {
+            return item.data.ups >= 1000 && item.data.ups <= 10000;
+          });
+        } else if (postVote === "10to50") {
+          return this.posts.filter((item) => {
+            return item.data.ups > 10000 && item.data.ups <= 50000;
+          });
+        } else if (postVote === "50to100") {
+          return this.posts.filter((item) => {
+            return item.data.ups > 50000 && item.data.ups <= 100000;
+          });
+        } else if (postVote === "gt100") {
+          return this.posts.filter((item) => {
+            return item.data.ups > 100000;
+          });
+        } else if (postTime === "Morning") {
+          return this.posts.filter((item) => {
+            let time = this.timeFormat(item.data.created);
+            return time >= 1 && time < 12;
+          });
+        } else if (postTime === "Afternoon") {
+          return this.posts.filter((item) => {
+            let time = this.timeFormat(item.data.created);
+            return time >= 12 && time < 16;
+          });
+        } else if (postTime === "Evening") {
+          return this.posts.filter((item) => {
+            let time = this.timeFormat(item.data.created);
+            return time >= 16 && time < 23;
+          });
         } else {
-          return this.posts;
+          let asc = this.posts.sort((a, b) => {
+            return parseFloat(b.data.ups) - parseFloat(a.data.ups);
+          });
+          return asc;
         }
       } else {
         let des = this.posts.sort((a, b) => {
@@ -147,12 +214,21 @@ export default {
         });
     });
   },
+  methods: {
+    checkVotes(){},
+    timeFormat(value) {
+      var d = new Date(0);
+      let dated = d.setUTCSeconds(String(value));
+      return moment.utc(dated).format("HH");
+    }
+  },
   filters: {
     dateFormat(value) {
       var d = new Date(0);
       let dated = d.setUTCSeconds(String(value));
       return moment.utc(dated).format("lll");
     },
+    
   },
 };
 </script>

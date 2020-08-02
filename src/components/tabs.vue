@@ -71,7 +71,6 @@ export default {
   },
   mounted() {
     this.tabs = this.$children;
-    this.getName();
     this.$nextTick(() => {
       this.selectTab(this.tabs[0]);
     });
@@ -82,13 +81,7 @@ export default {
       this.tabs.forEach((tab) => {
         tab.isActive = tab.href == selectedTab.href;
       });
-    },
-    getName() {
-      this.selected = this.tabs
-        .filter((item) => item.isActive == true)
-        .map((ele) => ele.name);
-      console.log("sada ", this.selected);
-    },
+    }
   },
   computed: {
     // selected(){

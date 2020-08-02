@@ -20,6 +20,7 @@
 <script>
 import Tab from "@/components/tab.vue";
 import Tabs from "@/components/tabs.vue";
+import moment from "moment";
 export default {
   mounted() {
     this.$store.dispatch("fetchPosts");
@@ -48,7 +49,15 @@ export default {
             isActive: false,
           };
         });
+      console.log(group)
       return group;
+    },
+  },
+  filters: {
+    dateFormat(value) {
+      var d = new Date(0);
+      let dated = d.setUTCSeconds(String(value));
+      return moment.utc(dated).format("hh:mm");
     },
   },
 };

@@ -24,6 +24,16 @@ body {
     font-size: 24px;
     text-transform: capitalize;
 }
+.fs-24{
+    font-size: 24px;
+}
+.emptystate{
+    min-height: 75vh;
+    width: 100%;
+}
+.emptystate img{
+    max-height: 180px;
+}
 .post {
     height: 500px;
     display: flex;
